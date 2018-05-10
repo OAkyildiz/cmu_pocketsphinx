@@ -20,8 +20,6 @@ class KWSDetection(object):
         self.continuous_pub_ = rospy.Publisher(
             "jsgf_audio", String, queue_size=10)
 
-        self.i = 1
-
         # initialize node
         rospy.init_node("kws_control")
         # Call custom function on node shutdown
@@ -54,9 +52,9 @@ class KWSDetection(object):
         if rospy.has_param(_hmm_param):
             self.class_hmm = rospy.get_param(_hmm_param)
             if rospy.get_param(_hmm_param) == ":default":
-                if os.path.isdir("/usr/local/share/pocketsphinx/model"):
+                if os.path.isdir("/usr/share/pocketsphinx/model"):
                     rospy.loginfo("Loading the default acoustic model")
-                    self.class_hmm = "/usr/local/share/pocketsphinx/model/en-us/en-us"
+                    self.class_hmm = "/usr/share/pocketsphinx/model/en-us/en-us"
                     rospy.loginfo("Done loading the default acoustic model")
                 else:
                     rospy.logerr(
@@ -131,7 +129,6 @@ class KWSDetection(object):
         # Check if keyword detected
         if not self.stop_output:
             # Actual processing
-            # self.i += 1
             self.decoder.process_raw(data.data, False, False)
 
             if self.decoder.hyp() != None:
@@ -148,8 +145,6 @@ class KWSDetection(object):
                     print ('INSIDE')
                     self.stop_output = True
                 self.decoder.start_utt()
-            # else:
-                # rospy.loginfo("NOT FOUND" + str(self.i))
         else:
             self.continuous_pub_.publish(data.data)
 

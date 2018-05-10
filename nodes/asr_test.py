@@ -44,9 +44,9 @@ class ASRTest(object):
         if rospy.has_param(_hmm_param):
             self.hmm = rospy.get_param(_hmm_param)
             if rospy.get_param(_hmm_param) == ":default":
-                if os.path.isdir("/usr/local/share/pocketsphinx/model"):
+                if os.path.isdir("/usr/share/pocketsphinx/model"):
                     rospy.loginfo("Loading the default acoustic model")
-                    self.hmm = "/usr/local/share/pocketsphinx/model/en-us/en-us"
+                    self.hmm = "/usr/share/pocketsphinx/model/en-us/en-us"
                     rospy.loginfo("Done loading the default acoustic model")
                 else:
                     rospy.logerr(
@@ -113,9 +113,7 @@ class ASRTest(object):
             fsg = jsgf.build_fsg(rule, self.decoder.get_logmath(), 7.5)
             rospy.loginfo("Writing fsg to " +
                           self.gram + '.fsg')
-            rospy.loginfo('1234567')
             fsg.writefile(self.gram + '.fsg')
-            rospy.loginfo('1234567')
 
             self.decoder.set_fsg(self.gram, fsg)
             self.decoder.set_search(self.gram)
